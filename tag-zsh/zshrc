@@ -1,0 +1,511 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Path to your oh-my-zsh installation.
+export ZSH=$HOME/.oh-my-zsh
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="xiong-chiamiov-plus"
+
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to automatically update without prompting.
+# DISABLE_UPDATE_PROMPT="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS=true
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Which plugins would you like to load?
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+#plugins=( git sudo  autojump web-search wd colorize colored-man-pages zsh-autosuggestions zsh-syntax-highlighting sublime )
+#plugins=(sublime sudo history autojump compleat colorize  web-search colored-man-pages zsh-autosuggestions zsh-syntax-highlighting  )
+plugins=(git z  wd sudo  autojump history  catimg extract  colorize  web-search colored-man-pages zsh-autosuggestions zsh-syntax-highlighting  )
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8 
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+   export EDITOR='vim'
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+export LANG=zh_CN.UTF-8
+export LANGUAGE=zh_CN:en_US
+export LC_CTYPE=en_US.UTF-8
+
+export GTK_IM_MODULE=fcitx5
+export QT_IM_MODULE=fcitx5
+export XMODIFIERS="@im=fcitx5"
+setopt AUTOCD
+#fzf插件 让你可以在终端下快速模糊查找,并可以配合其他程序来打开查找到的文件
+#export FZF_DEFAULT_OPTS='--bind=ctrl-t:top,change:top --bind ctrl-f:down,ctrl-u:up'
+export FZF_DEFAULT_OPTS='--bind ctrl-f:down,ctrl-u:up --preview "[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (ccat --color=always {} || highlight -O ansi -l {} || cat {}) 2> /dev/null | head -500"'
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+#export FZF_DEFAULT_COMMAND='fd'
+export FZF_COMPLETION_TRIGGER='\'
+export FZF_TMUX=1
+export FZF_TMUX_HEIGHT='80%'
+export fzf_preview_cmd='[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (ccat --color=always {} || highlight -O ansi -l {} || cat {}) 2> /dev/null | head -500'
+source ~/.config/zsh/key-bindings.zsh
+source ~/.config/zsh/completion.zsh
+if [ -f ~/.sconfig/zsh/zshrc ]; then
+	source ~/.sconfig/zsh/zshrc
+fi
+
+_fzf_fpath=${0:h}/fzf
+fpath+=$_fzf_fpath
+#autoload -U $_fzf_fpath/*(.:t)
+unset _fzf_fpath
+
+fzf-redraw-prompt() {
+	local precmd
+	for precmd in $precmd_functions; do
+		$precmd
+	done
+	zle reset-prompt
+}
+zle -N fzf-redraw-prompt
+
+zle -N fzf-find-widget
+bindkey '^p' fzf-find-widget
+
+fzf-cd-widget() {
+	local tokens=(${(z)LBUFFER})
+	if (( $#tokens <= 1 )); then
+		zle fzf-find-widget 'only_dir'
+		if [[ -d $LBUFFER ]]; then
+			cd $LBUFFER
+			local ret=$?
+			LBUFFER=
+			zle fzf-redraw-prompt
+			return $ret
+		fi
+	fi
+}
+zle -N fzf-cd-widget
+bindkey '^t' fzf-cd-widget
+
+fzf-history-widget() {
+	local num=$(history $LBUFFER)
+	local ret=$?
+	if [[ -n $num ]]; then
+		zle vi-fetch-history -n $num
+	fi
+	zle reset-prompt
+	return $ret
+}
+zle -N fzf-history-widget
+bindkey '^R' fzf-history-widget
+
+fif() {
+  if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+  rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
+}
+
+find-in-file() {
+	grep --line-buffered --color=never -r "" * | fzf
+}
+zle -N find-in-file
+bindkey '^f' find-in-file
+
+export GTK_IM_MODULE=fcitx5
+export QT_IM_MODULE=fcitx5
+export XMODIFIERS="@im=fcitx5"
+
+#xmodmap ~/.xmodmap		
+alias ls='ls --color=auto'
+#alias net="sudo ip link set  wlp4s0 down;sudo ip link set  wlp4s0 up"
+alias net="/home/manjaro/shells/net.sh"
+alias pm="sudo pacman -S "
+alias s.="source "
+alias sz="source /home/manjaro/.zshrc "
+alias vz="vim /home/manjaro/.zshrc"
+alias py="python3.8"
+alias -s txt =mousepad
+[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && . ~/.autojump/etc/profile.d/autojump.sh
+alias pip-i="pip install -i http://pypi.douban.com/simple --trusted-host pypi.douban.com"
+alias p="sudo pacman -S" 
+alias cdls="cd $1 && echo -e '当前目录：\c';pwd ;ls  "
+alias y='yaourt -S'
+alias cman="man -M /usr/share/man/zh-CN"
+alias mouseon="sudo modprobe psmouse"
+alias sudo="sudo -E"
+alias quxiao='sudo shutdown -c'
+alias riji="vim 我的日记.md"
+alias mousedown="sudo modprobe -r psmouse"
+alias restartnet="systemctl restart netctl-auto@wlp4s0.service"
+alias onenote="p3x-onenote"
+#source /home/manjaro/.oh-my-zsh/plugins/incr/incr*.zsh
+alias work="/home/manjaro/workflowy/workflowy-1.3.5_5762.AppImage"
+alias tnew="tmux new -s"
+alias ra="ranger"
+alias c=clear
+alias vi3="vim ~/.config/i3/config"
+alias vip="vim ~/.config/polybar/config"
+alias cdi="cd ~/.config/"
+alias vx="vim ~/.xinitrc"
+alias findin="sudo ~/shells/findin.sh"
+alias vrc="vim ~/.config/ranger/rc.conf"
+alias vimrc="vim ~/.vimrc"
+alias vra="vim ~/.config/ranger/rc.conf"
+alias vie=vi3
+alias beifen="~/shells/backup.sh "
+
+
+[ ! -e ~/.dircolors ] && eval $(dircolors -p > ~/.dircolors)
+[ -e /bin/dircolors ] && eval $(dircolors -b > ~/.dircolors)
+alias p="sudo pacman -S "
+alias vz="vim .zshrc "
+alias vw="cd ~/Downloads/dwm && vim config.h"
+alias mm="cd ~/Downloads/dwm && sudo make clean install"
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias dingding='dingtalk-linux'
+alias lg='lazygit'
+alias qq="icalingua"
+alias va="vim ~/arch-windows20211215.txt"
+alias guanji='shutdown -h now '
+alias ee='emacs '
+alias weixin="wechat-uos"
+export TMPDIR=~/tmp
+alias dingding="flatpak run com.dingtalk.DingTalk"
+alias m=mutt
+alias ts="texstudio"
+#快速查找文件 在 ~/.bashrc 或 ~/.zshrc 中添加
+ff() {
+  echo "manman"  |   find "$1" -name "*$2*"  2>/dev/null
+}
+alias cdd="cd ~/Desktop/"
+alias yj="~/yj.sh"
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+# OpenClaw Completion
+source "/home/manjaro/.openclaw/completions/openclaw.zsh"
+alias sss="ssh u0_a397@100.101.154.106 -p 8022"
+export env QT_IM_MODULE=fcitx5
+
+
+#################################################################
+#######   ssh的远端的自动补全设置
+# 本地文件名补bash zsh通用
+complete -f scp
+#zsh更智能
+autoload -Uz compinit
+compinit
+#上传到家里的桌面
+scp2host() {
+    if [ $# -ne 3 ]; then
+        echo "用法: scp2host <本地路径> <host别名> <远程路径>"
+        return 1
+    fi
+    scp -rpC "$1" "$2:$3"
+}
+
+
+
+#从单位的桌面下载到本地
+scpfromhost() {
+    if [ $# -ne 3 ]; then
+        echo "用法: scpfromhost <host别名> <远程路径> <本地路径>"
+        return 1
+    fi
+    scp -rpC "$1:$2" "$3"
+}
+####目前没有成功
+#################################################################
+
+
+#################################################################
+###与其他人用ssh对话
+##在接收的设备上建立文件，权限设为666.
+##发送消息到手机
+smcc() {
+    [ $# -eq 0 ] && echo "用法: smcc <消息>" && return 1
+    ssh cc "echo '[$(date '+%Y-%m-%d %H:%M:%S')] oo：$*' >> ~/chan1"
+}
+##发送消息到ll电脑
+smll() {
+    [ $# -eq 0 ] && echo "用法: smll <消息>" && return 1
+    ssh ll "echo '[$(date '+%Y-%m-%d %H:%M:%S')] oo：$*' >> ~/chan1"
+}
+##发送消息到oo电脑
+smoo() {
+    [ $# -eq 0 ] && echo "用法: smoo <消息>" && return 1
+    ssh ll "echo '[$(date '+%Y-%m-%d %H:%M:%S')] oo：$*' >> ~/chan1"
+}
+
+##发送连续信息,输入后C-d 结束。
+smxx() {
+ssh $1 "cat >> ~/chan1"}
+
+##接收消息，并显示时间
+jieshou() {
+tail -f ~/chan1 | while read line; do
+    #echo "[$(date '+%Y-%m-%d %H:%M:%S')] $line"
+    echo "$line"
+done
+}
+#################################################################
+
+
+
+#################################################################
+##发送端函数（每台机器都装）
+##把下面函数放进 ~/.bashrc（或 .zshrc）：
+# 发送消息到某台机器
+# 用法: send cc 我到公司了
+send() {
+    [ $# -lt 2 ] && echo "用法: send <cc|ll> <消息>" && return 1
+    local target="$1"
+    shift
+    local from
+    from=$(hostname -s)
+    ssh "$target" "echo '[$(date "+%F %T")][$from] $*' >> ~/chan1"
+}
+
+
+# 用法: recv
+recv() {
+    [ ! -f ~/chan1 ] && touch ~/chan1 && chmod 666 ~/chan1
+
+    tail -f ~/chan1 | while read -r line; do
+        # 找当前用户所有 tty
+        local ttys
+        ttys=$(who | awk -v u="$USER" '$1==u {print $2}')
+
+        if [ -n "$ttys" ]; then
+            # 写进每个 tty（write 一次只能一个）
+            while read -r tty; do
+                echo "$line" | write "$USER" "$tty" 2>/dev/null
+            done <<< "$ttys"
+        else
+            # 没有 tty 就直接打印（比如纯 ssh 命令环境）
+            echo "$line"
+        fi
+    done
+}
+
+
+##真实使用流程（超直观）
+##在手机（cc）和电脑（ll）上都启动接收器
+##recv
+##只做一次，挂着就行。
+##手机给电脑发消息
+##send ll 我到电梯口了
+##电脑终端立刻弹出：
+##Message from recv on pts/1...[2026-08-07 15:01:12][cc] 我到电梯口了
+##像 write，带时间，带发送者
+##电脑回手机，send cc 收到，门开着，手机终端弹出：[2026-08-07 15:01:18][ll] 收到，门开着
+#################################################################
+
+alias tramp="emacs /sshx:oo:~/"
+
+# CTRL-T - Paste the selected file path(s) into the command line
+__fzf_select() {
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local item
+  FZF_DEFAULT_COMMAND=${FZF_CTRL_T_COMMAND:-} \
+  FZF_DEFAULT_OPTS=$(__fzf_defaults "--reverse --walker=file,dir,follow,hidden --scheme=path" "${FZF_CTRL_T_OPTS-} -m") \
+  FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd) "$@" < /dev/tty | while read -r item; do
+    echo -n -E "${(q)item} "
+  done
+  local ret=$?
+  echo
+  return $ret
+}
+
+__fzfcmd() {
+  [ -n "${TMUX_PANE-}" ] && { [ "${FZF_TMUX:-0}" != 0 ] || [ -n "${FZF_TMUX_OPTS-}" ]; } &&
+    echo "fzf-tmux ${FZF_TMUX_OPTS:--d${FZF_TMUX_HEIGHT:-40%}} -- " || echo "fzf"
+}
+
+fzf-file-widget() {
+  LBUFFER="${LBUFFER}$(__fzf_select)"
+  local ret=$?
+  zle reset-prompt
+  return $ret
+}
+if [[ "${FZF_CTRL_T_COMMAND-x}" != "" ]]; then
+  zle     -N            fzf-file-widget
+  bindkey -M emacs '^T' fzf-file-widget
+  bindkey -M vicmd '^T' fzf-file-widget
+  bindkey -M viins '^T' fzf-file-widget
+fi
+
+# ALT-C - cd into the selected directory
+fzf-cd-widget() {
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local dir="$(
+    FZF_DEFAULT_COMMAND=${FZF_ALT_C_COMMAND:-} \
+    FZF_DEFAULT_OPTS=$(__fzf_defaults "--reverse --walker=dir,follow,hidden --scheme=path" "${FZF_ALT_C_OPTS-} +m") \
+    FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd) < /dev/tty)"
+  if [[ -z "$dir" ]]; then
+    zle redisplay
+    return 0
+  fi
+  # Use subshell expansion to get the absolute PWD of the target dir.
+  # This allows the recorded shell history to be reused even from a different
+  # working directory.
+  # If failed, fallback to the unexpanded path to surface the error to the user.
+  # NOTE: Don't use the `:a` modifier as it resolves symlinks like `pwd -P`.
+  dir=$(builtin cd -q >/dev/null -- "${dir}" && echo "${PWD}" || echo "${dir}")
+  zle push-line # Clear buffer. Auto-restored on next prompt.
+  BUFFER="builtin cd -- ${(q)dir}"
+  zle accept-line
+  local ret=$?
+  unset dir # ensure this doesn't end up appearing in prompt expansion
+  zle reset-prompt
+  return $ret
+}
+if [[ "${FZF_ALT_C_COMMAND-x}" != "" ]]; then
+  zle     -N             fzf-cd-widget
+  bindkey -M emacs '\ec' fzf-cd-widget
+  bindkey -M vicmd '\ec' fzf-cd-widget
+  bindkey -M viins '\ec' fzf-cd-widget
+fi
+
+# CTRL-R - Paste the selected command from history into the command line
+fzf-history-widget() {
+  local selected extracted_with_perl=0
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases no_glob no_sh_glob no_ksharrays extendedglob 2> /dev/null
+  # Ensure the module is loaded if not already, and the required features, such
+  # as the associative 'history' array, which maps event numbers to full history
+  # lines, are set. Also, make sure Perl is installed for multi-line output.
+  if zmodload -F zsh/parameter p:{commands,history} 2>/dev/null && (( ${+commands[perl]} )); then
+    extracted_with_perl=1
+    selected="$(printf '%s\t%s\000' "${(kv)history[@]}" |
+      perl -0 -ne 'if (!$seen{(/^\s*[0-9]+\**\t(.*)/s, $1)}++) { s/\n/\n\t/g; print; }' |
+      FZF_DEFAULT_OPTS=$(__fzf_defaults "" "-n2..,.. --scheme=history --bind=ctrl-r:toggle-sort,alt-r:toggle-raw --wrap-sign '\t↳ ' --highlight-line --multi ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} --read0") \
+      FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd))"
+  else
+    selected="$(fc -rl 1 | __fzf_exec_awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
+      FZF_DEFAULT_OPTS=$(__fzf_defaults "" "-n2..,.. --scheme=history --bind=ctrl-r:toggle-sort,alt-r:toggle-raw --wrap-sign '\t↳ ' --highlight-line --multi ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER}") \
+      FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd))"
+  fi
+  local ret=$?
+  local -a cmds
+  # Avoid leaking auto assigned values when using backreferences '(#b)'
+  local -a mbegin mend match
+  if [ -n "$selected" ]; then
+    # Heuristic to check if the selected value is from history or a custom query
+    if ((( extracted_with_perl )) && [[ $selected == <->$'\t'* ]]) ||
+    ((( ! extracted_with_perl )) && [[ $selected == [[:blank:]]#<->(  |\* )* ]]); then
+      # Split at newlines
+      for line in ${(ps:\n:)selected}; do
+        if (( extracted_with_perl )); then
+          if [[ $line == (#b)(<->)(#B)$'\t'* ]]; then
+            (( ${+history[${match[1]}]} )) && cmds+=("${history[${match[1]}]}")
+          fi
+        elif [[ $line == [[:blank:]]#(#b)(<->)(#B)(  |\* )* ]]; then
+          # Avoid $history array: lags behind 'fc' on foreign commands (*)
+          # https://zsh.org/mla/users/2024/msg00692.html
+          # Push BUFFER onto stack; fetch and save history entry from BUFFER; restore
+          zle .push-line
+          zle vi-fetch-history -n ${match[1]}
+          (( ${#BUFFER} )) && cmds+=("${BUFFER}")
+          BUFFER=""
+          zle .get-line
+        fi
+      done
+      if (( ${#cmds[@]} )); then
+        # Join by newline after stripping trailing newlines from each command
+        BUFFER="${(pj:\n:)${(@)cmds%%$'\n'#}}"
+        CURSOR=${#BUFFER}
+      fi
+    else # selected is a custom query, not from history
+      LBUFFER="$selected"
+    fi
+  fi
+  zle reset-prompt
+  return $ret
+}
+if [[ ${FZF_CTRL_R_COMMAND-x} != "" ]]; then
+  if [[ -n ${FZF_CTRL_R_COMMAND-} ]]; then
+    echo "warning: FZF_CTRL_R_COMMAND is set to a custom command, but custom commands are not yet supported for CTRL-R" >&2
+  fi
+  zle     -N            fzf-history-widget
+  bindkey -M emacs '^R' fzf-history-widget
+  bindkey -M vicmd '^R' fzf-history-widget
+  bindkey -M viins '^R' fzf-history-widget
+fi
+fi
+
+} always {
+  eval $__fzf_key_bindings_options
+  'unset' '__fzf_key_bindings_options'
+}

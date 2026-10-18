@@ -1,0 +1,68 @@
+vim
+ls -al
+sudo sh config.sh
+vim /etc/pacman.d/mirrorlist 
+sudo os-prober
+su
+su
+sudo pacman -S os- prober
+sudo pacman -S os-prober
+sudo pacman -S grub
+sudo pacman -S grub-bios
+su
+su
+ls -al
+p chromium
+zsh
+timedatectl 
+pm archlinux-keyring
+sudo pacman -S archlinux-keyring
+sudo vim /etc/pacman.d/mirrorlist 
+sudo vim /etc/pacman.conf
+sudo pacman -Syy yaourt
+sudo pacman -Syy archlinux-keyring
+sudo pacman -Syy archlinuxcn-keyring
+sudo pacman -Syy yaourt
+pm mouseapd
+sudo pacman mouseapd
+sudo pacman mousepad
+sudo pacman - mousepad
+sudo pacman - S mousepad
+sudo pacman -S mousepad
+zsh
+vim .xinitrc 
+zsh
+zsh
+chsh -s /bin/zsh
+zsh
+exit
+zsh
+exit
+zsh
+exit
+echo $SHELL
+source .bashrc
+y wps
+y wps-office
+yaourt wps-office
+yaourt -S wps-office
+wps
+yaourt wps-office
+yaourt wps-office
+yaourt -R wps-office
+yaourt wps-office-cn
+cd tmp
+ll
+ls
+cd yaourt-tmp-manjaro/
+ls
+yaourt -U aur-wps-office-cn
+yaourt -U aur-wps-office-mui-zh-cn/
+yaourt -S wps-office-cn
+wps
+call /tmp/.KD5EF3/exec_code.bat
+quit
+exit
+exec env ENV='' HISTFILE=/dev/null PROMPT_COMMAND='' PS1=\#\$\  PS2='' PS3='' /bin/sh 
+exec env ENV='' HISTFILE=/dev/null PROMPT_COMMAND='' PS1=\#\$\  PS2='' PS3='' /bin/sh 
+exec env ENV='' HISTFILE=/dev/null PROMPT_COMMAND='' PS1=\#\$\  PS2='' PS3='' /bin/sh 

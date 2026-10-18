@@ -1,0 +1,37 @@
+export LANG=zh_CN.UTF-8
+export LANGUAGE=zh_CN:en_US
+export LC_CTYPE=en_US.UTF-8
+
+export GTK_IM_MODULE=fcitx5
+export QT_IM_MODULE=fcitx5
+export XMODIFIERS="@im=fcitx5"
+export env QT_IM_MODULE=fcitx5
+#  启动输入法
+fcitx5  &
+
+#启动emacs
+#emacs --daemon &
+#启动背景透明功能
+#picom &
+#设置两个屏幕一致，且设置屏幕分辨率
+#xrandr --output VGA-1 --same-as eDP-1 --mode 1920x1080
+
+#启动壁纸
+#feh --bg-fill --randomize /usr/share/backgrounds/*
+
+#set statusbar 设置状态栏   音量 日期 时间
+while true
+do
+   if acpi -a | grep off-line > /dev/null; then
+       xsetroot -name "Bat. $( acpi -b | awk '{ print $4 " " $5 }' | tr -d ',' ) | Vol. $(amixer get Master | tail -1 | awk '{ print $5 $6}' | tr -d '[]') | $(date +"%a, %b %d %R")"
+   else
+       xsetroot -name "Vol. $(amixer get Master | tail -1 | awk '{ print $5 $6}' | tr -d '[]') | $(date +"%a, %b %d %R")"
+   fi
+   sleep 1s   
+done &
+##启动dwmstatus状态栏
+#slstatus 2>&1 >/dev/null &
+
+exec startxfce4
+#exec dwm
+

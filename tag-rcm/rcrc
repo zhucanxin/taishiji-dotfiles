@@ -1,0 +1,22 @@
+# lsrc和rcup会读取这个文件里信息再做相应的动作,但是mkrc rcdn则结合没有这么紧密.
+
+
+#tags是针对点文件目录的
+TAGS="zsh bash ranger vim vim-ceshi archbiji  mutt ceshi emacs git xinit "
+
+# EXCLUDES也是针对点文件目录的
+EXCLUDES=""
+
+# 针对点文件目录的
+SYMLINK_DIRS="vim vim-ceshi oh-my-zsh emacs.d"
+
+# 针对点文件目录的
+UNDOTTED="arch-windows20211215.txt rcm--一个管理你的dotfile的软件.md"
+
+# 针对点文件目录的
+COPY_ALWAYS="arch-windows20211215.txt rcm--一个管理你的dotfile的软件.md"
+
+HOSTNAME=""
+
+
+
